@@ -180,6 +180,85 @@ window.addEventListener('DOMContentLoaded', () => {
     document.getElementById('copyright-year').textContent = new Date().getFullYear();
 });
 
+// Share Profile Function
+function shareProfile() {
+    const shareData = {
+        title: 'Mohamed Al Maraghi - Profile',
+        text: 'Check out Mohamed Al Maraghi\'s professional profile - B.Sc. in Cybersecurity',
+        url: window.location.href
+    };
+
+    // Check if Web Share API is supported (mostly mobile)
+    if (navigator.share) {
+        navigator.share(shareData)
+            .catch((error) => {
+                if (error.name !== 'AbortError') {
+                    copyToClipboard();
+                }
+            });
+    } else {
+        // Fallback: Copy to clipboard
+        copyToClipboard();
+    }
+}
+
+function copyToClipboard() {
+    const url = window.location.href;
+    
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(() => {
+            showNotification('Profile link copied to clipboard!');
+        }).catch(() => {
+            fallbackCopy(url);
+        });
+    } else {
+        fallbackCopy(url);
+    }
+}
+
+function fallbackCopy(text) {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-999999px';
+    document.body.appendChild(textArea);
+    textArea.select();
+    
+    try {
+        document.execCommand('copy');
+        showNotification('Profile link copied to clipboard!');
+    } catch (err) {
+        showNotification('Unable to copy link');
+    }
+    
+    document.body.removeChild(textArea);
+}
+
+function showNotification(message) {
+    // Remove existing notification if any
+    const existing = document.querySelector('.notification');
+    if (existing) existing.remove();
+    
+    // Create notification
+    const notification = document.createElement('div');
+    notification.className = 'notification';
+    notification.innerHTML = `
+        <i class="fas fa-check-circle"></i>
+        <span>${message}</span>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Trigger animation
+    setTimeout(() => notification.classList.add('show'), 10);
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
+}
+
 // Track analytics (optional - can be integrated with Google Analytics)
 function trackEvent(category, action, label) {
     console.log(`Event: ${category} - ${action} - ${label}`);

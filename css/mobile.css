@@ -26,6 +26,8 @@
 body {
     font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+    background-size: 200% 200%;
+    animation: gradientShift 15s ease infinite;
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -33,6 +35,12 @@ body {
     padding: 40px 15px;
     position: relative;
     overflow-x: hidden;
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
 #particles {
@@ -78,11 +86,47 @@ body {
     overflow: hidden;
 }
 
+.share-btn-float {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    color: #8b5cf6;
+    font-size: 18px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 10;
+    backdrop-filter: blur(10px);
+    -webkit-tap-highlight-color: transparent;
+}
+
+.share-btn-float:active {
+    background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+    color: white;
+    transform: scale(0.9);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+}
+
 .header-background {
     width: 100%;
     height: 100%;
     background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 50%, #1e293b 100%);
+    background-size: 200% 200%;
+    animation: headerGradient 8s ease infinite;
     position: relative;
+}
+
+@keyframes headerGradient {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
 }
 
 .header-background::before {
@@ -112,6 +156,12 @@ body {
     object-fit: cover;
     border: 5px solid var(--card-background);
     box-shadow: var(--shadow-lg);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-image:active {
+    transform: scale(0.95);
+    box-shadow: 0 10px 20px -5px rgba(30, 64, 175, 0.3);
 }
 
 .status-indicator {
@@ -190,6 +240,18 @@ body {
     display: flex;
     align-items: center;
     gap: 8px;
+    animation: fadeInLeft 0.6s ease-out;
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 .section-title i {
@@ -203,6 +265,35 @@ body {
     line-height: 1.7;
     color: var(--text-secondary);
     text-align: left;
+}
+
+.about-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.about-list li {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    padding: 8px 0 8px 25px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.about-list li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--primary-color);
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.about-list li:active {
+    color: var(--text-primary);
+    transform: translateX(3px);
 }
 
 /* Skills Section */
@@ -246,9 +337,29 @@ body {
     font-size: 15px;
     font-weight: 600;
     text-decoration: none;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: var(--shadow-sm);
     -webkit-tap-highlight-color: transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.contact-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.5s, height 0.5s;
+}
+
+.contact-btn:active::before {
+    width: 300px;
+    height: 300px;
 }
 
 .email-btn {
@@ -257,9 +368,9 @@ body {
 }
 
 .email-btn:active {
-    transform: scale(0.98);
-    box-shadow: var(--shadow-md);
-    background: #1e3a8a;
+    transform: scale(0.95);
+    box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(135deg, #1e3a8a, #1e40af);
 }
 
 .phone-btn {
@@ -268,21 +379,52 @@ body {
 }
 
 .phone-btn:active {
-    transform: scale(0.98);
-    box-shadow: var(--shadow-md);
+    transform: scale(0.95);
+    box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(135deg, #0f172a, #1e293b);
 }
 
 .cv-btn {
-    background: var(--background);
-    color: var(--text-primary);
-    border: 2px solid var(--border-color);
+    background: linear-gradient(135deg, #0d9488, #0f766e);
+    color: white;
+    border: none;
 }
 
 .cv-btn:active {
-    background: var(--text-primary);
+    transform: scale(0.95);
+    box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(135deg, #0f766e, #115e59);
+}
+
+/* Notification Styles */
+.notification {
+    position: fixed;
+    top: 20px;
+    left: 15px;
+    right: 15px;
+    background: linear-gradient(135deg, #10b981, #059669);
     color: white;
-    border-color: var(--text-primary);
-    transform: scale(0.98);
+    padding: 14px 20px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px -5px rgba(16, 185, 129, 0.4);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 500;
+    font-size: 14px;
+    z-index: 9999;
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: all 0.3s ease;
+}
+
+.notification.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.notification i {
+    font-size: 18px;
 }
 
 /* Social Links */
@@ -321,7 +463,12 @@ body {
 }
 
 .social-link:active {
-    transform: scale(0.98);
+    transform: scale(0.95);
+    box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.social-link:active i {
+    transform: scale(1.1);
 }
 
 .social-link.linkedin:active {
